@@ -1,1 +1,387 @@
-<!DOCTYPE html> <html> <head> <title>Dupe Finder</title> <style> body { background:#0f0f0f; color:white; font-family:Arial; text-align:center; padding:40px; } input { padding:10px; width:250px; } button { padding:10px; background:gold; border:none; cursor:pointer; } .card { background:#1a1a1a; margin:10px auto; padding:15px; width:300px; } </style> </head> <body> <h1>Dupe Finder</h1> <p>Search a product</p> <input id="search" placeholder="La Mer, SK-II..."> <button onclick="find()">Find</button> <div id="results"></div> <script> const database = [ { name: "La Mer Moisturizing Cream", brand: "La Mer", price: 350, ingredients: ["mineral oil","glycerin","petrolatum","algae"] }, { name: "Nivea Creme", brand: "Nivea", price: 5, ingredients: ["mineral oil","glycerin","petrolatum"] }, { name: "CeraVe Moisturizing Cream", brand: "CeraVe", price: 15, ingredients: ["glycerin","ceramides","hyaluronic acid"] }, { name: "SK-II Essence", brand: "SK-II", price: 200, ingredients: ["pitera","niacinamide"] }, { name: "Missha Time Revolution Essence", brand: "Missha", price: 30, ingredients: ["fermented yeast","niacinamide"] } ]; function similarity(a, b) { let match = 0; a.forEach(i => { if (b.includes(i)) match++; }); return match / Math.max(a.length, b.length); } function find() { const query = document.getElementById("search").value.toLowerCase(); const results = document.getElementById("results"); const original = database.find(p => p.name.toLowerCase().includes(query)); if (!original) { results.innerHTML = "Product not found"; return; } const dupes = database .filter(p => p !== original) .map(p => ({ ...p, score: similarity(original.ingredients, p.ingredients) })) .sort((a,b) => b.score - a.score) .slice(0,3); results.innerHTML = "<h2>Results:</h2>"; dupes.forEach(p => { const saving = Math.round((1 - p.price / original.price) * 100); results.innerHTML += ` <div class="card"> <h3>${p.name}</h3> <p>${p.brand}</p> <p>Similarity: ${Math.round(p.score*100)}%</p> <p>${saving}% cheaper</p> </div> `; }); } </script> </body> </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blistex: Rekabet Stratejisi ve Pazar Dinamikleri</title>
+  <style>
+    :root {
+      --blistex-red: #c8102e;
+      --blistex-navy: #102a54;
+      --blistex-white: #ffffff;
+      --ink: #1d2430;
+      --muted: #5f6b7b;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --success: #0f8b4c;
+      --warn: #b6432f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .deck {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 40px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .slide {
+      background: var(--card);
+      border-radius: 18px;
+      border: 1px solid #d7dfeb;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(16, 42, 84, 0.08);
+    }
+
+    .slide-header {
+      padding: 14px 20px;
+      background: linear-gradient(90deg, var(--blistex-navy), #1f488a);
+      color: var(--blistex-white);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide-body { padding: 24px; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      color: var(--blistex-navy);
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 14px;
+      background: var(--blistex-red);
+      color: var(--blistex-white);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .image-block {
+      background: linear-gradient(140deg, #1c3c71, #c8102e);
+      color: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 170px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .image-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      opacity: 0.9;
+      letter-spacing: 0.6px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .kpi {
+      border: 1px solid #dce3ee;
+      border-left: 6px solid var(--blistex-red);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fcfdff;
+    }
+
+    .kpi .label { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; }
+    .kpi .value { font-size: 1.35rem; font-weight: 800; color: var(--blistex-navy); }
+
+    .price-road {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      font-weight: 700;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #d3dded;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .pill.red { background: #ffe5ea; border-color: #ffc2cf; color: #8e0f28; }
+    .pill.green { background: #e5f7ee; border-color: #bde7cf; color: #0f6f3f; }
+
+    .arrow { color: var(--blistex-red); font-size: 1.2rem; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .quote-card {
+      background: #f4f8ff;
+      border: 1px solid #d3e2ff;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .quote-card .motto {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--blistex-red);
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 12px;
+      font-size: 0.93rem;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e1e8f4;
+      text-align: left;
+    }
+
+    th {
+      background: var(--blistex-navy);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .bar-wrap {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 90px;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .bar {
+      position: relative;
+      background: #e7edf8;
+      border-radius: 999px;
+      height: 16px;
+      overflow: hidden;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--blistex-red), #eb5169);
+    }
+
+    .risk {
+      border-left: 6px solid var(--warn);
+      background: #fff5f3;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .action {
+      background: #f7faff;
+      border: 1px solid #d6e3f9;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    .footer-call {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #102a54, #c8102e);
+      color: #fff;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .split {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide">
+      <div class="slide-header"><span>1. Giriş</span><span>Blistex Sunumu</span></div>
+      <div class="slide-body hero">
+        <div>
+          <h1>Blistex: Rekabet Stratejisi ve Pazar Dinamikleri</h1>
+          <p>Bu sunum, gümrük vergisi tasarrufları ve operasyonel marj feragatlerinin raftaki fiyat rekabeti için neden vazgeçilmez olduğunu net şekilde ortaya koyar.</p>
+          <span class="badge">Amaç: Rafta kal, sepette kazan, hacimde büyü</span>
+        </div>
+        <div class="image-block">
+          <span class="image-label">Görsel Konsept</span>
+          <h3>Kozmetik reyonu + finansal kontrol paneli</h3>
+          <p>Kurumsal, modern, veri odaklı anlatım. Kırmızı-Lacivert-Beyaz marka paleti.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-header"><span>2. Mevcut Durum (Shelf Reality)</span><span>Fiyat Zorunluluğu</span></div>
+      <div class="slide-body">
+        <p>Blistex MedPlus, liste seviyesinden rafa inmek zorunda kaldı. Çünkü tüketici karşılaştırmayı Nivea ve Vaseline ile aynı rafta, aynı saniyede yapıyor.</p>
+        <div class="price-road">
+          <span class="pill red">Liste Fiyatı: 225 TL</span>
+          <span class="arrow">➜</span>
+          <span class="pill green">Raf Fiyatı: 67 TL</span>
+          <span class="arrow">➜</span>
+          <span class="pill">Hedef: Satış Hacmi + Dönüş Hızı</span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="label">Fiyat İndirimi</div><div class="value">-158 TL</div></div>
+          <div class="kpi"><div class="label">İndirim Oranı</div><div class="value">%70.2</div></div>
+          <div class="kpi"><div class="label">Rafta Rekabet Eşiği</div><div class="value">≤ 70 TL</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-header"><span>3. Tasarruf ve Yeniden Yatırım</span><span>Savings = Competitiveness</span></div>
+      <div class="slide-body split">
+        <div>
+          <div class="quote-card">
+            <p>Vergi avantajı kâr hanesine yazılmıyor.</p>
+            <p>Vergi avantajı doğrudan raf fiyatına geri yatırılıyor.</p>
+            <div class="motto">Savings = Competitiveness</div>
+          </div>
+          <div class="actions">
+            <div class="action">1) Maliyet avantajı alınır.</div>
+            <div class="action">2) Marj feragati ile fiyat aşağı çekilir.</div>
+            <div class="action">3) Rafta erişilebilirlik artar, penetrasyon büyür.</div>
+          </div>
+        </div>
+        <div class="image-block">
+          <span class="image-label">Yeniden Yatırım Döngüsü</span>
+          <h3>Tasarruf → Daha düşük raf fiyatı → Daha yüksek satış döngüsü</h3>
+          <p>Bu mekanizma, markanın büyüme motorunu besleyen ana kaldıraçtır.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-header"><span>4. Marj Yapısı ve Perakende Dinamiği</span><span>Gratis Örneği</span></div>
+      <div class="slide-body">
+        <p><strong>Kur:</strong> 1 USD = 44.78 TL &nbsp;|&nbsp; <strong>Ürün:</strong> MedPlus Stick &nbsp;|&nbsp; <strong>Fatura:</strong> 1.51 USD</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Kalem</th>
+              <th>USD</th>
+              <th>TL Karşılığı</th>
+              <th>Not</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tedarikçi Fatura Bedeli</td>
+              <td>1.51</td>
+              <td>67.62 TL</td>
+              <td>Ürünün giriş maliyet tabanı</td>
+            </tr>
+            <tr>
+              <td>Perakendeci Marj Farkı</td>
+              <td>0.68</td>
+              <td>30.45 TL</td>
+              <td>Rafta görünürlük ve kanal motivasyonu</td>
+            </tr>
+            <tr>
+              <td>Toplam Çıkış Seviyesi</td>
+              <td>2.19</td>
+              <td>98.07 TL</td>
+              <td>Kampanya/iskonto mekanikleri öncesi gösterge</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="bar-wrap">
+          <div class="bar-row"><span>Fatura Bedeli</span><div class="bar"><span style="width:68.95%"></span></div><strong>1.51 USD</strong></div>
+          <div class="bar-row"><span>Marj Farkı</span><div class="bar"><span style="width:31.05%; background:linear-gradient(90deg,#102a54,#3a5d95)"></span></div><strong>0.68 USD</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-header"><span>5. Kritik Risk Analizi</span><span>Delisting Riski</span></div>
+      <div class="slide-body">
+        <p>Alış fiyatındaki her artış doğrudan raf fiyatına baskı yapar. Eşik aşılırsa tüketici alternatife kayar, satış hızı düşer, perakendeci ürünün raf verimini zayıf görür.</p>
+        <div class="risk">
+          <strong>Net risk:</strong> Alış fiyatı artışı ➜ Raf fiyatı yükselişi ➜ Rekabet avantajı kaybı ➜ <strong>Delisting</strong> ➜ Büyüme motorunun kırılması.
+        </div>
+        <div class="actions">
+          <div class="action">Kritik eşik korunmazsa kategori payı geri alınması zor biçimde erir.</div>
+          <div class="action">Delisting yalnızca satış kaybı değil; marka görünürlüğü kaybıdır.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-header"><span>6. Sonuç</span><span>Eylem Çağrısı</span></div>
+      <div class="slide-body">
+        <h2 style="color: var(--blistex-navy); margin-bottom: 10px;">Sürdürülebilir büyüme için destek mekanizması devam etmelidir.</h2>
+        <p>Mevcut vergi tasarrufu ve marj yönetimi modeli, kısa vadeli kârdan çok daha değerlidir: rafta kalıcılık, fiyat erişilebilirliği ve ölçekli büyüme sağlar.</p>
+        <div class="footer-call">Karar önerisi: Destek mekanizmasını koru. Fiyat rekabetçiliğini güvence altına al. Büyüme motorunu çalışır tut.</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
